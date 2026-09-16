@@ -1,0 +1,43 @@
+---
+// Elogios verbatim, coletados dos comentários públicos do Instagram
+// (ver Análise de Instagram.md, seção "Provas Sociais e Diferenciais").
+// Sem nome/handle: não coletamos consentimento explícito para publicar
+// identificação de clientes reais, então mantemos o elogio sem atribuição.
+// NUNCA traduzir estas citações — são verbatim, traduzir mudaria o que a
+// cliente realmente escreveu (ver src/data/i18n.ts).
+import { t } from "../data/i18n";
+
+const depoimentos = [
+  "Perfeito 👏👏👏",
+  "0 defeitos ❤️❤️❤️🔥",
+  "Resultado impecável😍",
+  "Dedicação do início ao fim! ✨️",
+  "Entregando sempre 😍😍😍❤️",
+];
+---
+
+<section id="depoimentos" class="scroll-mt-20 bg-ink py-20 text-paper">
+  <div class="reveal mx-auto max-w-6xl px-4 sm:px-6">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blush" data-i18n="depoimentos.eyebrow">
+      {t.pt["depoimentos.eyebrow"]}
+    </p>
+    <h2 class="mt-3 max-w-2xl font-display text-3xl sm:text-4xl" style="text-wrap: balance;" data-i18n="depoimentos.heading">
+      {t.pt["depoimentos.heading"]}
+    </h2>
+
+    <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        depoimentos.map((texto) => (
+          <li class="rounded-2xl border border-paper/15 bg-paper/5 p-6">
+            <p class="font-sans text-lg font-medium italic text-paper/90">&ldquo;{texto}&rdquo;</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-8 max-w-prose text-sm text-paper/60">
+      <span data-i18n="depoimentos.attributionPrefix">{t.pt["depoimentos.attributionPrefix"]}</span>{" "}
+      <span translate="no">@lashhousept</span>.
+    </p>
+  </div>
+</section>

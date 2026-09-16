@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import aboutPortrait from "../assets/jessica-about.jpg";
+import { SITE } from "../data/site";
+import { t } from "../data/i18n";
+---
+
+<section id="sobre" class="scroll-mt-20 mx-auto max-w-6xl px-4 py-20 sm:px-6">
+  <div class="reveal grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
+    <Image
+      src={aboutPortrait}
+      alt={`${SITE.profissional} sorrindo, fundadora da ${SITE.nome}`}
+      widths={[320, 480, 640]}
+      sizes="(min-width: 768px) 480px, 90vw"
+      class="aspect-[4/5] w-full max-w-md rounded-3xl object-cover shadow-xl md:justify-self-end"
+      loading="lazy"
+    />
+
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-umber">
+        <span data-i18n="sobre.eyebrowPrefix">{t.pt["sobre.eyebrowPrefix"]}</span> {SITE.profissional}
+      </p>
+      <h2 class="mt-3 font-display text-3xl sm:text-4xl" style="text-wrap: balance;" data-i18n="sobre.heading">
+        {t.pt["sobre.heading"]}
+      </h2>
+
+      <blockquote
+        class="mt-6 max-w-prose border-l-2 border-gold pl-5 font-sans text-xl font-medium italic text-ink/90"
+        data-i18n="sobre.quote"
+      >
+        {t.pt["sobre.quote"]}
+      </blockquote>
+
+      <p class="mt-6 max-w-prose text-base leading-relaxed text-ink/75" data-i18n="sobre.body">
+        {t.pt["sobre.body"]}
+      </p>
+    </div>
+  </div>
+</section>

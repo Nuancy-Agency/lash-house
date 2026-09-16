@@ -1,0 +1,158 @@
+---
+import "../styles/global.css";
+import { getImage } from "astro:assets";
+import ogImageSrc from "../assets/jessica-hero.jpg";
+import { SITE } from "../data/site";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const ogImage = await getImage({ src: ogImageSrc, format: "jpg", quality: 75 });
+const ogImageUrl = new URL(ogImage.src, Astro.site);
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#fbf8f3" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.nome} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:url" content={pageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" href="/fonts/gloock-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/hanken-variable.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Sem JS (bloqueado, CSP, falha de rede): o comentário em .reveal
+         (global.css) promete conteúdo visível por padrão, mas a regra real
+         parte de opacity:0 — corrigido aqui para não deixar a página em
+         branco. O menu mobile (Alpine) também não pode virar um botão morto
+         escondendo os links de navegação. -->
+    <noscript>
+      <style>
+        .reveal {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        [data-js-toggle] {
+          display: none !important;
+        }
+        #menu-mobile[x-cloak] {
+          display: block !important;
+        }
+        #cta-sticky-mobile[x-cloak] {
+          display: block !important;
+        }
+      </style>
+    </noscript>
+  </head>
+  <body class="bg-paper text-ink antialiased">
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+    >
+      Saltar para o conteúdo
+    </a>
+    <slot />
+
+    <script>
+      // Toggle de idioma PT/EN — achado P0 do /impeccable critique 2026-09-12
+      // (site vende clientela de "+30 países" mas só existia em pt-PT).
+      // Roda antes do Alpine/reveal para já aplicar o idioma certo sem "flash"
+      // de português em visitantes que preferem inglês. Fonte única de verdade
+      // do texto é src/data/i18n.ts; cada componente já renderiza a chave certa
+      // (data-i18n) e o valor PT (para funcionar sem JS).
+      import { t } from "../data/i18n";
+
+      function detectDefaultLang(): "pt" | "en" {
+        const saved = localStorage.getItem("lash-house-lang");
+        if (saved === "pt" || saved === "en") return saved;
+        return navigator.language?.toLowerCase().startsWith("pt") ? "pt" : "en";
+      }
+
+      function applyLang(lang: "pt" | "en") {
+        document.documentElement.lang = lang === "pt" ? "pt-PT" : "en";
+        document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n as keyof (typeof t)["pt"] | undefined;
+          if (key && t[lang][key] !== undefined) el.textContent = t[lang][key];
+        });
+        document.querySelectorAll<HTMLAnchorElement>("[data-href-pt][data-href-en]").forEach((el) => {
+          const href = lang === "pt" ? el.dataset.hrefPt : el.dataset.hrefEn;
+          if (href) el.href = href;
+        });
+        document.querySelectorAll<HTMLElement>("[data-lang-toggle-aria]").forEach((el) => {
+          el.setAttribute("aria-label", t[lang]["lang.toggleLabel"]);
+          el.setAttribute("title", t[lang]["lang.toggleLabel"]);
+        });
+        document.querySelectorAll<HTMLElement>("[data-lang-current]").forEach((el) => {
+          el.textContent = lang.toUpperCase();
+        });
+        window.__lashHouseLang = lang;
+        localStorage.setItem("lash-house-lang", lang);
+      }
+
+      declare global {
+        interface Window {
+          __lashHouseLang: "pt" | "en";
+          lashHouseToggleLang: () => void;
+        }
+      }
+
+      const initialLang = detectDefaultLang();
+      applyLang(initialLang);
+
+      window.lashHouseToggleLang = () => {
+        applyLang(window.__lashHouseLang === "pt" ? "en" : "pt");
+      };
+    </script>
+
+    <script>
+      import Alpine from "alpinejs";
+      declare global {
+        interface Window {
+          Alpine: typeof Alpine;
+        }
+      }
+      window.Alpine = Alpine;
+      Alpine.start();
+    </script>
+
+    <script>
+      // Scroll-reveal progressivo: conteúdo já está visível por padrão (CSS),
+      // isto só adiciona a classe de transição quando o elemento entra na
+      // viewport. Sem JS, nada quebra — tudo permanece visível.
+      const items = document.querySelectorAll<HTMLElement>(".reveal");
+      if ("IntersectionObserver" in window && items.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15 }
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add("is-visible"));
+      }
+    </script>
+  </body>
+</html>

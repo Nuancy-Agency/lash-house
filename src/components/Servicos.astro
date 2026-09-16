@@ -1,0 +1,46 @@
+---
+import { bookingLink } from "../data/site";
+import { t } from "../data/i18n";
+
+const servicos = [0, 1, 2, 3, 4] as const;
+---
+
+<section id="servicos" class="scroll-mt-20 bg-cream/60 py-20">
+  <div class="reveal mx-auto max-w-6xl px-4 sm:px-6">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-umber" data-i18n="servicos.eyebrow">
+      {t.pt["servicos.eyebrow"]}
+    </p>
+    <h2 class="mt-3 max-w-2xl font-display text-3xl sm:text-4xl" style="text-wrap: balance;" data-i18n="servicos.heading">
+      {t.pt["servicos.heading"]}
+    </h2>
+    <p class="mt-4 max-w-prose text-ink/70" data-i18n="servicos.subtitle">
+      {t.pt["servicos.subtitle"]}
+    </p>
+
+    <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        servicos.map((i) => (
+          <li class="flex h-full flex-col rounded-2xl border border-ink/10 bg-paper p-6 shadow-sm transition-shadow hover:shadow-md">
+            <h3 class="font-display text-lg text-ink" data-i18n={`servico.${i}.nome`}>
+              {t.pt[`servico.${i}.nome`]}
+            </h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/70" data-i18n={`servico.${i}.descricao`}>
+              {t.pt[`servico.${i}.descricao`]}
+            </p>
+            <a
+              href={bookingLink("pt")}
+              data-href-pt={bookingLink("pt")}
+              data-href-en={bookingLink("en")}
+              data-i18n="servicos.cta"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-umber underline-offset-4 hover:underline"
+            >
+              {t.pt["servicos.cta"]}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

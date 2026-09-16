@@ -1,0 +1,33 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Sobre from "../components/Sobre.astro";
+import Servicos from "../components/Servicos.astro";
+import GaleriaResultados from "../components/GaleriaResultados.astro";
+import Depoimentos from "../components/Depoimentos.astro";
+import Diferenciais from "../components/Diferenciais.astro";
+import Localizacao from "../components/Localizacao.astro";
+import Faq from "../components/Faq.astro";
+import CTAFinal from "../components/CTAFinal.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout
+  title="Lash House | Especialista em Extensão de Cílios em Lisboa"
+  description="Jéssica, especialista em extensão de cílios (fio a fio, volume, híbrido, lash lifting) na Lash House, Lisboa. Atendimento a clientes de mais de 30 países. Agende no Fresha."
+>
+  <Header />
+  <main id="conteudo">
+    <Hero />
+    <Sobre />
+    <Servicos />
+    <GaleriaResultados />
+    <Depoimentos />
+    <Diferenciais />
+    <Localizacao />
+    <Faq />
+    <CTAFinal />
+  </main>
+  <Footer />
+</Layout>

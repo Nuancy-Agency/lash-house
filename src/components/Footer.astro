@@ -1,0 +1,61 @@
+---
+import { SITE, bookingLink } from "../data/site";
+import { t } from "../data/i18n";
+
+const ano = new Date().getFullYear();
+---
+
+<footer class="border-t border-ink/10 bg-paper py-10">
+  <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <p class="font-display text-lg text-ink" translate="no">{SITE.nome}</p>
+
+    <nav aria-label="Redes sociais e agendamento" class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/70">
+      <a href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer" class="min-h-11 inline-flex items-center hover:text-ink">
+        <span data-i18n="footer.instagram">{t.pt["footer.instagram"]}</span>
+      </a>
+      <a
+        href={SITE.freshaUrl}
+        data-href-pt={SITE.freshaUrl}
+        data-href-en={SITE.freshaUrl.replace("/pt/a/", "/en/a/")}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="min-h-11 inline-flex items-center hover:text-ink"
+      >
+        <span data-i18n="footer.fresha">{t.pt["footer.fresha"]}</span>
+      </a>
+      <a href={SITE.mapsUrl} target="_blank" rel="noopener noreferrer" class="min-h-11 inline-flex items-center hover:text-ink">
+        <span data-i18n="footer.maps">{t.pt["footer.maps"]}</span>
+      </a>
+    </nav>
+
+    <p class="text-xs text-ink/50">© {ano} {SITE.nome} · Lisboa, Portugal</p>
+  </div>
+</footer>
+
+<a
+  href={bookingLink("pt")}
+  data-href-pt={bookingLink("pt")}
+  data-href-en={bookingLink("en")}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Agendar no Fresha"
+  class="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-ink text-paper shadow-lg transition-transform hover:scale-[1.02] focus-visible:scale-[1.02] md:hidden"
+  style="touch-action: manipulation;"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="26"
+    height="26"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3.75" y="5.25" width="16.5" height="15" rx="2" />
+    <path d="M3.75 9.75h16.5M8.25 3v3.75M15.75 3v3.75" />
+    <path d="M8.25 13.5l2.25 2.25 4.5-4.5" />
+  </svg>
+</a>

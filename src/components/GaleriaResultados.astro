@@ -1,0 +1,53 @@
+---
+import { Image } from "astro:assets";
+import r1 from "../assets/gallery/resultado-01.jpg";
+import r2 from "../assets/gallery/resultado-02.jpg";
+import r3 from "../assets/gallery/resultado-03.jpg";
+import r4 from "../assets/gallery/resultado-04.jpg";
+import r5 from "../assets/gallery/resultado-05.jpg";
+import r6 from "../assets/gallery/resultado-06.jpg";
+import r7 from "../assets/gallery/resultado-07.jpg";
+import r8 from "../assets/gallery/resultado-08.jpg";
+import r9 from "../assets/gallery/resultado-09.jpg";
+import r10 from "../assets/gallery/resultado-10.jpg";
+import r11 from "../assets/gallery/resultado-11.jpg";
+import r12 from "../assets/gallery/resultado-12.jpg";
+import r13 from "../assets/gallery/resultado-13.jpg";
+import r14 from "../assets/gallery/resultado-14.jpg";
+import r15 from "../assets/gallery/resultado-15.jpg";
+import r16 from "../assets/gallery/resultado-16.jpg";
+import { t } from "../data/i18n";
+
+const fotos = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16];
+---
+
+<section id="resultados" class="scroll-mt-20 mx-auto max-w-6xl px-4 py-20 sm:px-6">
+  <div class="reveal">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-umber" data-i18n="resultados.eyebrow">
+      {t.pt["resultados.eyebrow"]}
+    </p>
+    <h2 class="mt-3 max-w-2xl font-display text-3xl sm:text-4xl" style="text-wrap: balance;" data-i18n="resultados.heading">
+      {t.pt["resultados.heading"]}
+    </h2>
+    <p class="mt-4 max-w-prose text-ink/70" data-i18n="resultados.subtitle">
+      {t.pt["resultados.subtitle"]}
+    </p>
+  </div>
+
+  <ul class="reveal mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+    {
+      fotos.map((foto, i) => (
+        <li class="group overflow-hidden rounded-2xl">
+          <Image
+            src={foto}
+            alt={`Resultado real de extensão de cílios feito na Lash House — foto ${i + 1} de ${fotos.length}`}
+            widths={[240, 360, 480]}
+            sizes="(min-width: 768px) 25vw, 45vw"
+            class="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            loading={i < 4 ? "eager" : "lazy"}
+          />
+        </li>
+      ))
+    }
+  </ul>
+</section>

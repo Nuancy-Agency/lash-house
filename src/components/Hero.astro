@@ -1,0 +1,141 @@
+---
+import { Image, getImage } from "astro:assets";
+import heroPortrait from "../assets/jessica-hero.jpg";
+import heroPoster from "../assets/hero-poster.jpg";
+import { SITE, bookingLink } from "../data/site";
+import { t } from "../data/i18n";
+
+const posterImg = await getImage({ src: heroPoster, format: "jpg", quality: 75 });
+---
+
+<section id="hero" class="relative overflow-hidden bg-ink text-paper">
+  <video
+    class="absolute inset-0 h-full w-full object-cover opacity-40"
+    src="/video/hero-loop.mp4"
+    poster={posterImg.src}
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    aria-hidden="true"
+    data-hero-video
+  >
+  </video>
+  <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/30" aria-hidden="true"></div>
+
+  <button
+    type="button"
+    data-hero-video-toggle
+    aria-pressed="true"
+    class="absolute right-4 bottom-4 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-full bg-ink/50 text-paper backdrop-blur-sm transition-colors hover:bg-ink/70"
+  >
+    <span class="sr-only" data-hero-video-toggle-label>Pausar vídeo de fundo</span>
+    <svg data-hero-video-icon-pause xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+    </svg>
+    <svg data-hero-video-icon-play xmlns="http://www.w3.org/2000/svg" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  </button>
+
+  <div class="relative mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 md:grid-cols-2 md:items-center md:py-28">
+    <div class="order-2 md:order-1">
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blush">
+        {SITE.nome} · <span data-i18n="hero.eyebrowSuffix">{t.pt["hero.eyebrowSuffix"]}</span>
+      </p>
+      <h1 class="mt-4 font-display text-4xl leading-[1.05] sm:text-5xl md:text-6xl" style="text-wrap: balance;">
+        <span data-i18n="hero.titlePrefix">{t.pt["hero.titlePrefix"]}</span>{" "}
+        <span class="text-gold underline decoration-2 underline-offset-4" data-i18n="hero.titleHighlight">
+          {t.pt["hero.titleHighlight"]}
+        </span>
+      </h1>
+      <p class="mt-6 max-w-prose text-lg text-paper/85" data-i18n="hero.subtitle">
+        {t.pt["hero.subtitle"]}
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href={bookingLink("pt")}
+          data-href-pt={bookingLink("pt")}
+          data-href-en={bookingLink("en")}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-11 items-center rounded-full bg-gold px-6 py-3 text-base font-semibold text-ink transition-transform hover:scale-[1.03] focus-visible:scale-[1.03]"
+        >
+          <span data-i18n="hero.ctaPrimary">{t.pt["hero.ctaPrimary"]}</span>
+        </a>
+        <a
+          href={SITE.instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-11 items-center rounded-full border border-paper/40 px-6 py-3 text-base font-semibold text-paper transition-colors hover:bg-paper/10"
+        >
+          <span data-i18n="hero.ctaSecondary">{t.pt["hero.ctaSecondary"]}</span>
+          <span class="sr-only" data-i18n="hero.ctaSecondarySr">{t.pt["hero.ctaSecondarySr"]}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="order-1 md:order-2">
+      <Image
+        src={heroPortrait}
+        alt={`${SITE.profissional}, especialista em extensão de cílios da ${SITE.nome}, em retrato profissional`}
+        widths={[320, 480, 640]}
+        sizes="(min-width: 768px) 480px, 80vw"
+        class="mx-auto aspect-[4/5] w-full max-w-sm rounded-3xl object-cover object-top shadow-2xl"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>("[data-hero-video]");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-hero-video-toggle]");
+  const label = document.querySelector<HTMLElement>("[data-hero-video-toggle-label]");
+  const iconPause = document.querySelector<SVGElement>("[data-hero-video-icon-pause]");
+  const iconPlay = document.querySelector<SVGElement>("[data-hero-video-icon-play]");
+
+  if (video) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const setPausedUi = (paused: boolean) => {
+      toggle?.setAttribute("aria-pressed", String(!paused));
+      if (label) label.textContent = paused ? "Reproduzir vídeo de fundo" : "Pausar vídeo de fundo";
+      iconPause?.classList.toggle("hidden", paused);
+      iconPlay?.classList.toggle("hidden", !paused);
+    };
+
+    const sync = () => {
+      if (reduceMotion.matches) {
+        video.pause();
+        video.removeAttribute("autoplay");
+        setPausedUi(true);
+      } else {
+        video
+          .play()
+          .then(() => setPausedUi(false))
+          .catch(() => {
+            /* autoplay pode ser bloqueado por política do navegador; o poster cobre esse caso */
+            setPausedUi(true);
+          });
+      }
+    };
+    sync();
+    reduceMotion.addEventListener("change", sync);
+
+    // Controle manual: obrigatório para loop com áudio ausente mas duração >5s
+    // reproduzindo ao lado de outro conteúdo (Web Interface Guidelines: pause/stop/hide).
+    toggle?.addEventListener("click", () => {
+      if (video.paused) {
+        video.play().catch(() => {});
+        setPausedUi(false);
+      } else {
+        video.pause();
+        setPausedUi(true);
+      }
+    });
+  }
+</script>

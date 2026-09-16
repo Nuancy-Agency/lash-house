@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------- */
+/* Fontes auto-hospedadas (Gloock + Hanken Grotesk) — decisão registrada em
+   site-forge/research/identity.json. Substituídas de Fraunces/Plus Jakarta
+   Sans depois que `npx impeccable detect` sinalizou as duas como "overused
+   font" (achado real, categoria slop) — ver justificativa atualizada no
+   identity.json. Gloock só existe em peso 400 (sem itálico); Hanken Grotesk
+   é variável (400-700) com itálico 500 dedicado. */
+/* ---------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Gloock";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/gloock-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/hanken-variable.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Hanken Grotesk";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/hanken-italic-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tema — cores e tipografia derivadas de identity.json (paleta real extraída
+   da Análise Visual.md). Centralizado aqui: nunca hardcodar hex nos
+   componentes. */
+/* ---------------------------------------------------------------------- */
+
+@theme {
+  --font-display: "Gloock", ui-serif, Georgia, serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --color-gold: #c9a46a;
+  --color-cream: #e9dfcf;
+  --color-ink: #2b2320;
+  --color-umber: #8c6a4a;
+  --color-blush: #f2c9c9;
+
+  --color-paper: #fbf8f3;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  .bg-ink :focus-visible {
+    outline-color: var(--color-paper);
+  }
+}
+
+@layer utilities {
+  /* Reveal-on-scroll: progressivo, nunca esconde conteúdo se JS falhar
+     (elemento começa visível; Alpine só adiciona a classe de transição). */
+  .reveal {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}

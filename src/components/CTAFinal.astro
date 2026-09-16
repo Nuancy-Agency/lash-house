@@ -1,0 +1,66 @@
+---
+import { SITE, bookingLink } from "../data/site";
+import { t } from "../data/i18n";
+---
+
+<section class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+  <div class="reveal rounded-3xl bg-ink px-6 py-14 text-center text-paper sm:px-12">
+    <h2 class="mx-auto max-w-2xl font-display text-3xl sm:text-4xl" style="text-wrap: balance;" data-i18n="ctafinal.heading">
+      {t.pt["ctafinal.heading"]}
+    </h2>
+    <p class="mx-auto mt-4 max-w-prose text-paper/75" data-i18n="ctafinal.subtitle">
+      {t.pt["ctafinal.subtitle"]}
+    </p>
+    <a
+      href={bookingLink("pt")}
+      data-href-pt={bookingLink("pt")}
+      data-href-en={bookingLink("en")}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-8 inline-flex min-h-11 items-center rounded-full bg-gold px-8 py-3.5 text-base font-semibold text-ink transition-transform hover:scale-[1.03]"
+    >
+      <span data-i18n="ctafinal.cta">{t.pt["ctafinal.cta"]}</span>
+    </a>
+
+    <p class="mx-auto mt-6 max-w-prose text-sm text-paper/60">
+      <span data-i18n="contact.altChannel">{t.pt["contact.altChannel"]}</span>{" "}
+      <a
+        href={SITE.instagramUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="min-h-11 inline-flex items-center font-semibold text-blush underline underline-offset-4 hover:text-paper"
+      >
+        <span data-i18n="contact.altChannelCta">{t.pt["contact.altChannelCta"]}</span>
+      </a>
+    </p>
+  </div>
+</section>
+
+<!-- CTA sticky mobile: mitiga a fricção de redirecionar para o Fresha, mantendo
+     o agendamento sempre a um toque de distância (recomendação da base de
+     nicho beleza-estetica). Some no scroll para o topo/rodapé para não colidir
+     com o footer. -->
+<div
+  id="cta-sticky-mobile"
+  x-data="{ show: false }"
+  x-init="
+    const onScroll = () => { show = window.scrollY > 400 };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  "
+  x-show="show"
+  x-transition
+  x-cloak
+  class="fixed inset-x-4 bottom-4 z-40 md:hidden"
+>
+  <a
+    href={bookingLink("pt")}
+    data-href-pt={bookingLink("pt")}
+    data-href-en={bookingLink("en")}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex min-h-11 w-full items-center justify-center rounded-full bg-gold px-6 py-3.5 text-center text-base font-semibold text-ink shadow-lg"
+  >
+    <span data-i18n="ctafinal.cta">{t.pt["ctafinal.cta"]}</span>
+  </a>
+</div>
